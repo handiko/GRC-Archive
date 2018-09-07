@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: FSK Packet Transmission
-# Generated: Wed Apr  4 06:57:00 2018
+# Generated: Sat Sep  8 02:24:50 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -23,6 +23,7 @@ sys.path.append(os.environ.get('GRC_HIER_PATH', os.path.expanduser('~/.grc_gnura
 from PyQt4 import Qt
 from fsk_packet_tx import fsk_packet_tx  # grc-generated hier_block
 from gnuradio import analog
+from gnuradio import audio
 from gnuradio import blocks
 from gnuradio import channels
 from gnuradio import digital
@@ -287,9 +288,12 @@ class fsk(gr.top_block, Qt.QWidget):
         self.blocks_rotator_cc_1 = blocks.rotator_cc((-1.0*fsk_hi_tone/samp_rate)*2*math.pi)
         self.blocks_rotator_cc_0 = blocks.rotator_cc((-1.0*fsk_lo_tone/samp_rate)*2*math.pi)
         self.blocks_random_pdu_0 = blocks.random_pdu(4, 128, chr(0xFF), 2)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_vff((0.01, ))
         self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("TEST"), 500)
+        self.blocks_complex_to_real_0 = blocks.complex_to_real(1)
         self.blocks_complex_to_mag_1 = blocks.complex_to_mag(1)
         self.blocks_complex_to_mag_0 = blocks.complex_to_mag(1)
+        self.audio_sink_0 = audio.sink(48000, '', True)
 
         ##################################################
         # Connections
@@ -298,11 +302,14 @@ class fsk(gr.top_block, Qt.QWidget):
         self.msg_connect((self.blocks_random_pdu_0, 'pdus'), (self.fsk_packet_tx_0, 'data in'))    
         self.connect((self.blocks_complex_to_mag_0, 0), (self.blocks_sub_xx_0, 0))    
         self.connect((self.blocks_complex_to_mag_1, 0), (self.blocks_sub_xx_0, 1))    
+        self.connect((self.blocks_complex_to_real_0, 0), (self.blocks_multiply_const_vxx_0, 0))    
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.audio_sink_0, 0))    
         self.connect((self.blocks_rotator_cc_0, 0), (self.root_raised_cosine_filter_0, 0))    
         self.connect((self.blocks_rotator_cc_1, 0), (self.root_raised_cosine_filter_1, 0))    
         self.connect((self.blocks_sub_xx_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))    
         self.connect((self.blocks_tag_gate_0, 0), (self.blocks_rotator_cc_0, 0))    
         self.connect((self.blocks_tag_gate_0, 0), (self.blocks_rotator_cc_1, 0))    
+        self.connect((self.channels_channel_model_0, 0), (self.blocks_complex_to_real_0, 0))    
         self.connect((self.channels_channel_model_0, 0), (self.blocks_tag_gate_0, 0))    
         self.connect((self.channels_channel_model_0, 0), (self.qtgui_freq_sink_x_0, 0))    
         self.connect((self.channels_channel_model_0, 0), (self.qtgui_time_sink_x_0, 0))    
