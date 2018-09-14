@@ -1,15 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.9'?>
+<?grc format='1' created='3.7.10'?>
 <flow_graph>
   <timestamp>Sun Jul 27 12:41:54 2014</timestamp>
   <block>
     <key>options</key>
     <param>
       <key>author</key>
-      <value></value>
-    </param>
-    <param>
-      <key>alias</key>
       <value></value>
     </param>
     <param>
@@ -45,6 +41,10 @@
       <value>qt_gui</value>
     </param>
     <param>
+      <key>hier_block_src_path</key>
+      <value>.:</value>
+    </param>
+    <param>
       <key>id</key>
       <value>ber_curve_gen_ldpc</value>
     </param>
@@ -53,8 +53,16 @@
       <value>0</value>
     </param>
     <param>
+      <key>qt_qss_theme</key>
+      <value></value>
+    </param>
+    <param>
       <key>realtime_scheduling</key>
       <value></value>
+    </param>
+    <param>
+      <key>run_command</key>
+      <value>{python} -u {filename}</value>
     </param>
     <param>
       <key>run_options</key>
@@ -397,16 +405,16 @@
       <value>enc_ldpc</value>
     </param>
     <param>
-      <key>H</key>
-      <value>H</value>
-    </param>
-    <param>
       <key>value</key>
       <value>"ok"</value>
     </param>
     <param>
       <key>ndim</key>
       <value>2</value>
+    </param>
+    <param>
+      <key>H</key>
+      <value>H</value>
     </param>
   </block>
   <block>
@@ -436,16 +444,16 @@
       <value>0</value>
     </param>
     <param>
-      <key>G</key>
-      <value>G</value>
-    </param>
-    <param>
       <key>id</key>
       <value>enc_ldpc_G</value>
     </param>
     <param>
       <key>value</key>
       <value>"ok"</value>
+    </param>
+    <param>
+      <key>G</key>
+      <value>G</value>
     </param>
     <param>
       <key>ndim</key>
@@ -600,7 +608,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>35000000</value>
+      <value>350000</value>
     </param>
   </block>
   <block>

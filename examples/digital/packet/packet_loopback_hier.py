@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Packet Loopback Hier
-# Generated: Wed Sep 12 16:51:24 2018
+# Generated: Fri Sep 14 10:37:53 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -505,7 +505,7 @@ class packet_loopback_hier(gr.top_block, Qt.QWidget):
         )
         self.blocks_random_pdu_0 = blocks.random_pdu(20, 200, chr(0xFF), 2)
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_vcc((amp, ))
-        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("TEST"), 1000)
+        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("TEST"), 100)
         self.blocks_message_debug_0_0_0 = blocks.message_debug()
 
         ##################################################

@@ -1380,7 +1380,7 @@
     </param>
     <param>
       <key>period</key>
-      <value>1000</value>
+      <value>100</value>
     </param>
   </block>
   <block>
