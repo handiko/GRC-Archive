@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: M2 Lrpt
-# Generated: Fri Apr 20 07:40:32 2018
+# Generated: Sun Sep 16 19:15:44 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -329,14 +329,10 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         self.digital_cma_equalizer_cc_0 = digital.cma_equalizer_cc(16, 1.0, 6.28/400, 1)
         self.digital_clock_recovery_mm_xx_0 = digital.clock_recovery_mm_cc((ch_rate/baudrate)*(1+0.0), 0.25*gmu*gmu, 0.5, gmu, 0.005)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
-        self.blocks_tagged_stream_to_pdu_0 = blocks.tagged_stream_to_pdu(blocks.byte_t, 'packet_len')
-        self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 4096, "packet_len")
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("TCP_SERVER", '', '2011', 4096, False)
         self.blocks_rotator_cc_0 = blocks.rotator_cc(-(0.0 / samp_rate)*2*math.pi)
+        self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_char*1)
         self.blocks_float_to_char_0 = blocks.float_to_char(1, 127)
         self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, '/home/handiko/gqrx_20180415_012338_137900000_150000_fc.raw', False)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, filename, False)
-        self.blocks_file_sink_0.set_unbuffered(False)
         self.analog_rail_ff_0 = analog.rail_ff(-1, 1)
         self.analog_agc_xx_0 = analog.agc_cc(1e-2, 0.25, 1.0)
         self.analog_agc_xx_0.set_max_gain(65536)
@@ -344,15 +340,12 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_tagged_stream_to_pdu_0, 'pdus'), (self.blocks_socket_pdu_0, 'pdus'))    
         self.connect((self.analog_agc_xx_0, 0), (self.root_raised_cosine_filter_0, 0))    
         self.connect((self.analog_rail_ff_0, 0), (self.blocks_float_to_char_0, 0))    
         self.connect((self.analog_rail_ff_0, 0), (self.qtgui_time_sink_x_1, 0))    
         self.connect((self.blocks_file_source_0, 0), (self.blocks_rotator_cc_0, 0))    
-        self.connect((self.blocks_float_to_char_0, 0), (self.blocks_file_sink_0, 0))    
-        self.connect((self.blocks_float_to_char_0, 0), (self.blocks_stream_to_tagged_stream_0, 0))    
+        self.connect((self.blocks_float_to_char_0, 0), (self.blocks_null_sink_0, 0))    
         self.connect((self.blocks_rotator_cc_0, 0), (self.rational_resampler_xxx_2, 0))    
-        self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.blocks_tagged_stream_to_pdu_0, 0))    
         self.connect((self.blocks_throttle_0, 0), (self.qtgui_freq_sink_x_0, 0))    
         self.connect((self.blocks_throttle_0, 0), (self.qtgui_waterfall_sink_x_0, 0))    
         self.connect((self.blocks_throttle_0, 0), (self.rational_resampler_xxx_0, 0))    
@@ -449,7 +442,6 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
 
     def set_filename(self, filename):
         self.filename = filename
-        self.blocks_file_sink_0.open(self.filename)
 
     def get_bw(self):
         return self.bw
