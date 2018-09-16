@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: M2 Lrpt
-# Generated: Sun Sep 16 19:15:44 2018
+# Generated: Mon Sep 17 01:46:57 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -29,8 +29,10 @@ from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from optparse import OptionParser
 import math
+import osmosdr
 import sip
 import sys
+import time
 
 
 class m2_lrpt(gr.top_block, Qt.QWidget):
@@ -66,11 +68,14 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         self.sps = sps = int(ch_rate) / baudrate
         self.nfilt = nfilt = 32
         self.eb = eb = 0.7
+        self.source = source = 2
         self.samp_rate = samp_rate = 300e3
         self.rrc_taps = rrc_taps = firdes.root_raised_cosine(nfilt,nfilt,1.0/sps,eb,8*sps*nfilt)
         self.rf_rate = rf_rate = 2.4e6
+        self.rate = rate = [0, 2.4e6, 150e3]
         self.gmu = gmu = 0.002
         self.filename = filename = "meteor_LRPT_72kbaud_" + datetime.now().strftime("%d%m%Y_%H%M") + ".s"
+        self.device = device = [0,"rtl=0","file=gqrx_20180415_012338_137900000_150000_fc.raw,rate=150e3,throttle=True"]
         self.bw = bw = 6.28 / 100
 
         ##################################################
@@ -95,11 +100,11 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         self.top_layout.addWidget(self.tab)
         self.root_raised_cosine_filter_0 = filter.fir_filter_ccf(1, firdes.root_raised_cosine(
         	1, ch_rate, baudrate*1.0, 0.7, 32*sps))
-        self.rational_resampler_xxx_2 = filter.rational_resampler_ccc(
+        self.rational_resampler_xxx_1_0 = filter.rational_resampler_ccc(
                 interpolation=int(samp_rate),
-                decimation=int(150e3),
+                decimation=int(rate[source]),
                 taps=None,
-                fractional_bw=0.49,
+                fractional_bw=490e-3,
         )
         self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
                 interpolation=int(ch_rate),
@@ -324,15 +329,25 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         
         self._qtgui_const_sink_x_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0.pyqwidget(), Qt.QWidget)
         self.tab_grid_layout_1.addWidget(self._qtgui_const_sink_x_0_win, 0,0,1,1)
+        self.osmosdr_source_0_0 = osmosdr.source( args="numchan=" + str(1) + " " + device[source] )
+        self.osmosdr_source_0_0.set_sample_rate(rate[source])
+        self.osmosdr_source_0_0.set_center_freq(137.9e6 , 0)
+        self.osmosdr_source_0_0.set_freq_corr(52, 0)
+        self.osmosdr_source_0_0.set_dc_offset_mode(0, 0)
+        self.osmosdr_source_0_0.set_iq_balance_mode(0, 0)
+        self.osmosdr_source_0_0.set_gain_mode(False, 0)
+        self.osmosdr_source_0_0.set_gain(45, 0)
+        self.osmosdr_source_0_0.set_if_gain(20, 0)
+        self.osmosdr_source_0_0.set_bb_gain(20, 0)
+        self.osmosdr_source_0_0.set_antenna('', 0)
+        self.osmosdr_source_0_0.set_bandwidth(0, 0)
+          
         self.digital_costas_loop_cc_0 = digital.costas_loop_cc(6.28/200, 4, False)
         self.digital_constellation_soft_decoder_cf_1 = digital.constellation_soft_decoder_cf(digital.constellation_calcdist(([-1-1j, -1+1j, 1+1j, 1-1j]), ([0, 1, 3, 2]), 4, 1).base())
         self.digital_cma_equalizer_cc_0 = digital.cma_equalizer_cc(16, 1.0, 6.28/400, 1)
         self.digital_clock_recovery_mm_xx_0 = digital.clock_recovery_mm_cc((ch_rate/baudrate)*(1+0.0), 0.25*gmu*gmu, 0.5, gmu, 0.005)
-        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
-        self.blocks_rotator_cc_0 = blocks.rotator_cc(-(0.0 / samp_rate)*2*math.pi)
         self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_char*1)
         self.blocks_float_to_char_0 = blocks.float_to_char(1, 127)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, '/home/handiko/gqrx_20180415_012338_137900000_150000_fc.raw', False)
         self.analog_rail_ff_0 = analog.rail_ff(-1, 1)
         self.analog_agc_xx_0 = analog.agc_cc(1e-2, 0.25, 1.0)
         self.analog_agc_xx_0.set_max_gain(65536)
@@ -343,20 +358,18 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         self.connect((self.analog_agc_xx_0, 0), (self.root_raised_cosine_filter_0, 0))    
         self.connect((self.analog_rail_ff_0, 0), (self.blocks_float_to_char_0, 0))    
         self.connect((self.analog_rail_ff_0, 0), (self.qtgui_time_sink_x_1, 0))    
-        self.connect((self.blocks_file_source_0, 0), (self.blocks_rotator_cc_0, 0))    
         self.connect((self.blocks_float_to_char_0, 0), (self.blocks_null_sink_0, 0))    
-        self.connect((self.blocks_rotator_cc_0, 0), (self.rational_resampler_xxx_2, 0))    
-        self.connect((self.blocks_throttle_0, 0), (self.qtgui_freq_sink_x_0, 0))    
-        self.connect((self.blocks_throttle_0, 0), (self.qtgui_waterfall_sink_x_0, 0))    
-        self.connect((self.blocks_throttle_0, 0), (self.rational_resampler_xxx_0, 0))    
         self.connect((self.digital_clock_recovery_mm_xx_0, 0), (self.digital_cma_equalizer_cc_0, 0))    
         self.connect((self.digital_cma_equalizer_cc_0, 0), (self.digital_costas_loop_cc_0, 0))    
         self.connect((self.digital_constellation_soft_decoder_cf_1, 0), (self.analog_rail_ff_0, 0))    
         self.connect((self.digital_costas_loop_cc_0, 0), (self.digital_constellation_soft_decoder_cf_1, 0))    
         self.connect((self.digital_costas_loop_cc_0, 0), (self.qtgui_const_sink_x_0, 0))    
         self.connect((self.digital_costas_loop_cc_0, 0), (self.qtgui_time_sink_x_0, 0))    
+        self.connect((self.osmosdr_source_0_0, 0), (self.rational_resampler_xxx_1_0, 0))    
         self.connect((self.rational_resampler_xxx_0, 0), (self.analog_agc_xx_0, 0))    
-        self.connect((self.rational_resampler_xxx_2, 0), (self.blocks_throttle_0, 0))    
+        self.connect((self.rational_resampler_xxx_1_0, 0), (self.qtgui_freq_sink_x_0, 0))    
+        self.connect((self.rational_resampler_xxx_1_0, 0), (self.qtgui_waterfall_sink_x_0, 0))    
+        self.connect((self.rational_resampler_xxx_1_0, 0), (self.rational_resampler_xxx_0, 0))    
         self.connect((self.root_raised_cosine_filter_0, 0), (self.digital_clock_recovery_mm_xx_0, 0))    
 
     def closeEvent(self, event):
@@ -407,6 +420,13 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         self.eb = eb
         self.set_rrc_taps(firdes.root_raised_cosine(self.nfilt,self.nfilt,1.0/self.sps,self.eb,8*self.sps*self.nfilt))
 
+    def get_source(self):
+        return self.source
+
+    def set_source(self, source):
+        self.source = source
+        self.osmosdr_source_0_0.set_sample_rate(self.rate[self.source])
+
     def get_samp_rate(self):
         return self.samp_rate
 
@@ -414,8 +434,6 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.qtgui_waterfall_sink_x_0.set_frequency_range(0, self.samp_rate)
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.samp_rate)
-        self.blocks_throttle_0.set_sample_rate(self.samp_rate)
-        self.blocks_rotator_cc_0.set_phase_inc(-(0.0 / self.samp_rate)*2*math.pi)
 
     def get_rrc_taps(self):
         return self.rrc_taps
@@ -428,6 +446,13 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
 
     def set_rf_rate(self, rf_rate):
         self.rf_rate = rf_rate
+
+    def get_rate(self):
+        return self.rate
+
+    def set_rate(self, rate):
+        self.rate = rate
+        self.osmosdr_source_0_0.set_sample_rate(self.rate[self.source])
 
     def get_gmu(self):
         return self.gmu
@@ -442,6 +467,12 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
 
     def set_filename(self, filename):
         self.filename = filename
+
+    def get_device(self):
+        return self.device
+
+    def set_device(self, device):
+        self.device = device
 
     def get_bw(self):
         return self.bw
