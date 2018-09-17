@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: RTL SDR FM RX
-# Generated: Tue Apr 17 21:02:21 2018
+# Generated: Tue Sep 18 06:30:01 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -25,7 +25,6 @@ from gnuradio import gr
 from gnuradio import qtgui
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
-from gnuradio.filter import pfb
 from gnuradio.qtgui import Range, RangeWidget
 from grc_gnuradio import blks2 as grc_blks2
 from optparse import OptionParser
@@ -65,8 +64,8 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.samp_rate = samp_rate = 2.88e6
-        self.rfgain = rfgain = 20
-        self.freq = freq = 106.1
+        self.rfgain = rfgain = 10
+        self.freq = freq = 103.8
         self.ch_rate = ch_rate = 240e3
         self.audio_mute = audio_mute = False
         self.audio_cut = audio_cut = 12e3
@@ -75,10 +74,10 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._rfgain_range = Range(0, 49, 0.1, 20, 200)
+        self._rfgain_range = Range(0, 49, 0.1, 10, 200)
         self._rfgain_win = RangeWidget(self._rfgain_range, self.set_rfgain, 'RF Gain (dB)', "counter_slider", float)
         self.top_grid_layout.addWidget(self._rfgain_win, 2,0,1,1)
-        self._freq_range = Range(88, 108, 0.1, 106.1, 200)
+        self._freq_range = Range(88.0, 108.0, 0.1, 103.8, 200)
         self._freq_win = RangeWidget(self._freq_range, self.set_freq, 'Freq (MHz)', "counter_slider", float)
         self.top_grid_layout.addWidget(self._freq_win, 1,0,1,3)
         _audio_mute_check_box = Qt.QCheckBox('Audio Mute')
@@ -91,6 +90,12 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         self._afgain_range = Range(-20, 3, 0.1, -10, 200)
         self._afgain_win = RangeWidget(self._afgain_range, self.set_afgain, 'AF Gain (dB)', "counter_slider", float)
         self.top_grid_layout.addWidget(self._afgain_win, 2,1,1,1)
+        self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
+                interpolation=int(ch_rate),
+                decimation=int(samp_rate),
+                taps=None,
+                fractional_bw=None,
+        )
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
         	2048, #size
         	firdes.WIN_BLACKMAN_hARRIS, #wintype
@@ -106,7 +111,7 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0.enable_autoscale(False)
         self.qtgui_freq_sink_x_0.enable_grid(True)
         self.qtgui_freq_sink_x_0.set_fft_average(0.2)
-        self.qtgui_freq_sink_x_0.enable_axis_labels(False)
+        self.qtgui_freq_sink_x_0.enable_axis_labels(True)
         self.qtgui_freq_sink_x_0.enable_control_panel(False)
         
         if not False:
@@ -134,15 +139,6 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_win, 0,0,1,2)
-        self.pfb_decimator_ccf_0 = pfb.decimator_ccf(
-        	  12,
-        	  (),
-        	  0,
-        	  80,
-                  True,
-                  True)
-        self.pfb_decimator_ccf_0.declare_sample_delay(0)
-        	
         self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + '' )
         self.osmosdr_source_0.set_sample_rate(samp_rate)
         self.osmosdr_source_0.set_center_freq(freq*1e6, 0)
@@ -168,9 +164,9 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         self.connect((self.analog_quadrature_demod_cf_0, 0), (self.low_pass_filter_1, 0))    
         self.connect((self.blks2_valve_0, 0), (self.audio_sink_0, 0))    
         self.connect((self.low_pass_filter_1, 0), (self.blks2_valve_0, 0))    
-        self.connect((self.osmosdr_source_0, 0), (self.pfb_decimator_ccf_0, 0))    
         self.connect((self.osmosdr_source_0, 0), (self.qtgui_freq_sink_x_0, 0))    
-        self.connect((self.pfb_decimator_ccf_0, 0), (self.analog_quadrature_demod_cf_0, 0))    
+        self.connect((self.osmosdr_source_0, 0), (self.rational_resampler_xxx_0, 0))    
+        self.connect((self.rational_resampler_xxx_0, 0), (self.analog_quadrature_demod_cf_0, 0))    
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "RTL_FM_RX")
