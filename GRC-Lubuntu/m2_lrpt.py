@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: M2 Lrpt
-# Generated: Mon Sep 17 01:46:57 2018
+# Generated: Mon Sep 17 18:08:41 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -68,7 +68,7 @@ class m2_lrpt(gr.top_block, Qt.QWidget):
         self.sps = sps = int(ch_rate) / baudrate
         self.nfilt = nfilt = 32
         self.eb = eb = 0.7
-        self.source = source = 2
+        self.source = source = 1
         self.samp_rate = samp_rate = 300e3
         self.rrc_taps = rrc_taps = firdes.root_raised_cosine(nfilt,nfilt,1.0/sps,eb,8*sps*nfilt)
         self.rf_rate = rf_rate = 2.4e6

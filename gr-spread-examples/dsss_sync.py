@@ -1,10 +1,21 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 ##################################################
-# Gnuradio Python Flow Graph
+# GNU Radio Python Flow Graph
 # Title: Direct-sequence spread spectrum
 # Author: Paul David
-# Generated: Tue Sep 16 17:23:12 2014
+# Generated: Mon Sep 17 02:54:06 2018
 ##################################################
+
+if __name__ == '__main__':
+    import ctypes
+    import sys
+    if sys.platform.startswith('linux'):
+        try:
+            x11 = ctypes.cdll.LoadLibrary('libX11.so')
+            x11.XInitThreads()
+        except:
+            print "Warning: failed to XInitThreads()"
 
 from gnuradio import blocks
 from gnuradio import channels
@@ -21,15 +32,20 @@ from optparse import OptionParser
 import Spread
 import wx
 
+
 class dsss_sync(grc_wxgui.top_block_gui):
 
     def __init__(self):
         grc_wxgui.top_block_gui.__init__(self, title="Direct-sequence spread spectrum")
+        _icon_path = "/usr/share/icons/hicolor/32x32/apps/gnuradio-grc.png"
+        self.SetIcon(wx.Icon(_icon_path, wx.BITMAP_TYPE_ANY))
 
         ##################################################
         # Variables
         ##################################################
+        
         self.variable_constellation_0 = variable_constellation_0 = digital.constellation_calcdist(([-1, 1]), ([0, 1]), 2, 1).base()
+        
         self.samp_sym = samp_sym = 32
         self.samp_rate = samp_rate = 500e3
         self.samp_chip = samp_chip = 2
@@ -51,7 +67,7 @@ class dsss_sync(grc_wxgui.top_block_gui):
         	fft_rate=15,
         	average=False,
         	avg_alpha=None,
-        	title="Despread Signal ",
+        	title='Despread Signal ',
         	peak_hold=False,
         )
         self.GridAdd(self.wxgui_fftsink2_0_0.win, 2, 3, 1, 2)
@@ -67,7 +83,7 @@ class dsss_sync(grc_wxgui.top_block_gui):
         	fft_rate=15,
         	average=False,
         	avg_alpha=None,
-        	title="Received DS Signal",
+        	title='Received DS Signal',
         	peak_hold=False,
         )
         self.GridAdd(self.wxgui_fftsink2_0.win, 2, 1, 1, 2)
@@ -117,28 +133,23 @@ class dsss_sync(grc_wxgui.top_block_gui):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_throttle_0, 0), (self.Spread_ds_despreader_0, 0))
-        self.connect((self.blocks_throttle_0, 0), (self.wxgui_fftsink2_0, 0))
-        self.connect((self.blocks_repeat_0, 0), (self.Spread_ds_spreader_0, 0))
-        self.connect((self.Spread_ds_despreader_0, 0), (self.wxgui_fftsink2_0_0, 0))
-        self.connect((self.Spread_sync_0, 0), (self.Spread_preamble_0, 0))
-        self.connect((self.Spread_preamble_0, 0), (self.blocks_repeat_0, 0))
-        self.connect((self.channels_channel_model_0, 0), (self.blocks_delay_0, 0))
-        self.connect((self.blocks_delay_0, 0), (self.blocks_throttle_0, 0))
-        self.connect((self.Spread_ds_despreader_0, 0), (self.digital_dxpsk_demod_0, 0))
-        self.connect((self.digital_dxpsk_demod_0, 0), (self.blocks_keep_one_in_n_0, 0))
-        self.connect((self.blocks_keep_one_in_n_0, 0), (self.Spread_rx_sync_0, 0))
-        self.connect((self.digital_dxpsk_mod_0, 0), (self.channels_channel_model_0, 0))
-        self.connect((self.blocks_unpacked_to_packed_xx_0, 0), (self.digital_dxpsk_mod_0, 0))
-        self.connect((self.Spread_ds_spreader_0, 0), (self.blocks_unpacked_to_packed_xx_0, 0))
-
-        ##################################################
-        # Asynch Message Connections
-        ##################################################
-        self.msg_connect(self.Spread_framer_0, "out", self.Spread_sync_0, "in")
-        self.msg_connect(self.Spread_msg_source_0, "out", self.Spread_framer_0, "in")
-        self.msg_connect(self.Spread_rx_sync_0, "out", self.Spread_deframer_0, "in")
-
+        self.msg_connect((self.Spread_framer_0, 'out'), (self.Spread_sync_0, 'in'))    
+        self.msg_connect((self.Spread_msg_source_0, 'out'), (self.Spread_framer_0, 'in'))    
+        self.msg_connect((self.Spread_rx_sync_0, 'out'), (self.Spread_deframer_0, 'in'))    
+        self.connect((self.Spread_ds_despreader_0, 0), (self.digital_dxpsk_demod_0, 0))    
+        self.connect((self.Spread_ds_despreader_0, 0), (self.wxgui_fftsink2_0_0, 0))    
+        self.connect((self.Spread_ds_spreader_0, 0), (self.blocks_unpacked_to_packed_xx_0, 0))    
+        self.connect((self.Spread_preamble_0, 0), (self.blocks_repeat_0, 0))    
+        self.connect((self.Spread_sync_0, 0), (self.Spread_preamble_0, 0))    
+        self.connect((self.blocks_delay_0, 0), (self.blocks_throttle_0, 0))    
+        self.connect((self.blocks_keep_one_in_n_0, 0), (self.Spread_rx_sync_0, 0))    
+        self.connect((self.blocks_repeat_0, 0), (self.Spread_ds_spreader_0, 0))    
+        self.connect((self.blocks_throttle_0, 0), (self.Spread_ds_despreader_0, 0))    
+        self.connect((self.blocks_throttle_0, 0), (self.wxgui_fftsink2_0, 0))    
+        self.connect((self.blocks_unpacked_to_packed_xx_0, 0), (self.digital_dxpsk_mod_0, 0))    
+        self.connect((self.channels_channel_model_0, 0), (self.blocks_delay_0, 0))    
+        self.connect((self.digital_dxpsk_demod_0, 0), (self.blocks_keep_one_in_n_0, 0))    
+        self.connect((self.digital_dxpsk_mod_0, 0), (self.channels_channel_model_0, 0))    
 
     def get_variable_constellation_0(self):
         return self.variable_constellation_0
@@ -151,14 +162,15 @@ class dsss_sync(grc_wxgui.top_block_gui):
 
     def set_samp_sym(self, samp_sym):
         self.samp_sym = samp_sym
+        self.blocks_repeat_0.set_interpolation(self.samp_sym)
 
     def get_samp_rate(self):
         return self.samp_rate
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
         self.wxgui_fftsink2_0_0.set_sample_rate(self.samp_rate)
+        self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
         self.blocks_throttle_0.set_sample_rate(self.samp_rate)
 
     def get_samp_chip(self):
@@ -179,17 +191,13 @@ class dsss_sync(grc_wxgui.top_block_gui):
     def set_generator(self, generator):
         self.generator = generator
 
-if __name__ == '__main__':
-    import ctypes
-    import sys
-    if sys.platform.startswith('linux'):
-        try:
-            x11 = ctypes.cdll.LoadLibrary('libX11.so')
-            x11.XInitThreads()
-        except:
-            print "Warning: failed to XInitThreads()"
-    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    (options, args) = parser.parse_args()
-    tb = dsss_sync()
+
+def main(top_block_cls=dsss_sync, options=None):
+
+    tb = top_block_cls()
     tb.Start(True)
     tb.Wait()
+
+
+if __name__ == '__main__':
+    main()

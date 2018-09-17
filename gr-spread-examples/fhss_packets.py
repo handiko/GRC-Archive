@@ -1,10 +1,21 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 ##################################################
-# Gnuradio Python Flow Graph
+# GNU Radio Python Flow Graph
 # Title: FHSS Packets
 # Author: Paul David
-# Generated: Wed Sep 17 13:09:30 2014
+# Generated: Mon Sep 17 02:55:25 2018
 ##################################################
+
+if __name__ == '__main__':
+    import ctypes
+    import sys
+    if sys.platform.startswith('linux'):
+        try:
+            x11 = ctypes.cdll.LoadLibrary('libX11.so')
+            x11.XInitThreads()
+        except:
+            print "Warning: failed to XInitThreads()"
 
 from gnuradio import blocks
 from gnuradio import channels
@@ -22,10 +33,13 @@ from optparse import OptionParser
 import Spread
 import wx
 
+
 class fhss_packets(grc_wxgui.top_block_gui):
 
     def __init__(self):
         grc_wxgui.top_block_gui.__init__(self, title="FHSS Packets")
+        _icon_path = "/usr/share/icons/hicolor/32x32/apps/gnuradio-grc.png"
+        self.SetIcon(wx.Icon(_icon_path, wx.BITMAP_TYPE_ANY))
 
         ##################################################
         # Variables
@@ -51,7 +65,7 @@ class fhss_packets(grc_wxgui.top_block_gui):
         	fft_rate=15,
         	average=False,
         	avg_alpha=None,
-        	title="Received Spread Spectrum Signal",
+        	title='Received Spread Spectrum Signal',
         	peak_hold=False,
         )
         self.Add(self.wxgui_fftsink2_0_0.win)
@@ -67,7 +81,7 @@ class fhss_packets(grc_wxgui.top_block_gui):
         	fft_rate=15,
         	average=False,
         	avg_alpha=None,
-        	title="Despread Signal",
+        	title='Despread Signal',
         	peak_hold=False,
         )
         self.Add(self.wxgui_fftsink2_0.win)
@@ -115,24 +129,19 @@ class fhss_packets(grc_wxgui.top_block_gui):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.Spread_synthesizer_0, 0), (self.channels_channel_model_0, 0))
-        self.connect((self.channels_channel_model_0, 0), (self.Spread_rx_synthesizer_0, 0))
-        self.connect((self.digital_gmsk_demod_0, 0), (self.Spread_rx_sync_0, 0))
-        self.connect((self.digital_gmsk_mod_0, 0), (self.Spread_synthesizer_0, 0))
-        self.connect((self.blocks_unpacked_to_packed_xx_0, 0), (self.digital_gmsk_mod_0, 0))
-        self.connect((self.Spread_sync_0, 0), (self.blocks_unpacked_to_packed_xx_0, 0))
-        self.connect((self.channels_channel_model_0, 0), (self.wxgui_fftsink2_0_0, 0))
-        self.connect((self.Spread_rx_synthesizer_0, 0), (self.low_pass_filter_0, 0))
-        self.connect((self.low_pass_filter_0, 0), (self.wxgui_fftsink2_0, 0))
-        self.connect((self.low_pass_filter_0, 0), (self.digital_gmsk_demod_0, 0))
-
-        ##################################################
-        # Asynch Message Connections
-        ##################################################
-        self.msg_connect(self.Spread_framer_0, "out", self.Spread_sync_0, "in")
-        self.msg_connect(self.Spread_msg_source_0, "out", self.Spread_framer_0, "in")
-        self.msg_connect(self.Spread_rx_sync_0, "out", self.Spread_deframer_0, "in")
-
+        self.msg_connect((self.Spread_framer_0, 'out'), (self.Spread_sync_0, 'in'))    
+        self.msg_connect((self.Spread_msg_source_0, 'out'), (self.Spread_framer_0, 'in'))    
+        self.msg_connect((self.Spread_rx_sync_0, 'out'), (self.Spread_deframer_0, 'in'))    
+        self.connect((self.Spread_rx_synthesizer_0, 0), (self.low_pass_filter_0, 0))    
+        self.connect((self.Spread_sync_0, 0), (self.blocks_unpacked_to_packed_xx_0, 0))    
+        self.connect((self.Spread_synthesizer_0, 0), (self.channels_channel_model_0, 0))    
+        self.connect((self.blocks_unpacked_to_packed_xx_0, 0), (self.digital_gmsk_mod_0, 0))    
+        self.connect((self.channels_channel_model_0, 0), (self.Spread_rx_synthesizer_0, 0))    
+        self.connect((self.channels_channel_model_0, 0), (self.wxgui_fftsink2_0_0, 0))    
+        self.connect((self.digital_gmsk_demod_0, 0), (self.Spread_rx_sync_0, 0))    
+        self.connect((self.digital_gmsk_mod_0, 0), (self.Spread_synthesizer_0, 0))    
+        self.connect((self.low_pass_filter_0, 0), (self.digital_gmsk_demod_0, 0))    
+        self.connect((self.low_pass_filter_0, 0), (self.wxgui_fftsink2_0, 0))    
 
     def get_samp_sym(self):
         return self.samp_sym
@@ -148,8 +157,8 @@ class fhss_packets(grc_wxgui.top_block_gui):
         self.samp_rate = samp_rate
         self.wxgui_fftsink2_0_0.set_sample_rate(self.samp_rate)
         self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
-        self.channels_channel_model_0.set_frequency_offset(1 / self.samp_rate)
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 11000, 1000, firdes.WIN_HAMMING, 6.76))
+        self.channels_channel_model_0.set_frequency_offset(1 / self.samp_rate)
 
     def get_init(self):
         return self.init
@@ -169,17 +178,13 @@ class fhss_packets(grc_wxgui.top_block_gui):
     def set_code_rate(self, code_rate):
         self.code_rate = code_rate
 
-if __name__ == '__main__':
-    import ctypes
-    import sys
-    if sys.platform.startswith('linux'):
-        try:
-            x11 = ctypes.cdll.LoadLibrary('libX11.so')
-            x11.XInitThreads()
-        except:
-            print "Warning: failed to XInitThreads()"
-    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    (options, args) = parser.parse_args()
-    tb = fhss_packets()
+
+def main(top_block_cls=fhss_packets, options=None):
+
+    tb = top_block_cls()
     tb.Start(True)
     tb.Wait()
+
+
+if __name__ == '__main__':
+    main()

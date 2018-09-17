@@ -1,10 +1,21 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 ##################################################
-# Gnuradio Python Flow Graph
+# GNU Radio Python Flow Graph
 # Title: Fhss Sync
 # Author: Paul David
-# Generated: Tue Sep 16 17:24:30 2014
+# Generated: Mon Sep 17 13:36:42 2018
 ##################################################
+
+if __name__ == '__main__':
+    import ctypes
+    import sys
+    if sys.platform.startswith('linux'):
+        try:
+            x11 = ctypes.cdll.LoadLibrary('libX11.so')
+            x11.XInitThreads()
+        except:
+            print "Warning: failed to XInitThreads()"
 
 from gnuradio import analog
 from gnuradio import blocks
@@ -17,28 +28,29 @@ from gnuradio.fft import window
 from gnuradio.filter import firdes
 from gnuradio.wxgui import fftsink2
 from gnuradio.wxgui import forms
-from gnuradio.wxgui import numbersink2
 from gnuradio.wxgui import waterfallsink2
-from grc_gnuradio import blks2 as grc_blks2
 from grc_gnuradio import wxgui as grc_wxgui
 from optparse import OptionParser
 import Spread
 import numpy
 import wx
 
+
 class fhss_sync(grc_wxgui.top_block_gui):
 
     def __init__(self):
         grc_wxgui.top_block_gui.__init__(self, title="Fhss Sync")
+        _icon_path = "/usr/share/icons/hicolor/32x32/apps/gnuradio-grc.png"
+        self.SetIcon(wx.Icon(_icon_path, wx.BITMAP_TYPE_ANY))
 
         ##################################################
         # Variables
         ##################################################
-        self.samp_sym = samp_sym = 64
+        self.samp_sym = samp_sym = 32
         self.tone_freq = tone_freq = 2000
         self.samp_rate = samp_rate = 800e3
-        self.init = init = 1, 1, 1, 1
-        self.generator = generator = 1, 1, 0, 0, 1
+        self.init = init = 1, 1, 1, 1, 1, 1, 1
+        self.generator = generator = 1, 1, 0, 0, 1, 0, 1, 1
         self.code_rate = code_rate = int(samp_sym * 10000)
 
         ##################################################
@@ -50,7 +62,7 @@ class fhss_sync(grc_wxgui.top_block_gui):
         	sizer=_tone_freq_sizer,
         	value=self.tone_freq,
         	callback=self.set_tone_freq,
-        	label="Tone Frequency",
+        	label='Tone Frequency',
         	converter=forms.float_converter(),
         	proportion=0,
         )
@@ -78,26 +90,9 @@ class fhss_sync(grc_wxgui.top_block_gui):
         	fft_rate=15,
         	average=False,
         	avg_alpha=None,
-        	title="Received Spread Spectrum ",
+        	title='Received Spread Spectrum ',
         )
         self.Add(self.wxgui_waterfallsink2_0.win)
-        self.wxgui_numbersink2_0 = numbersink2.number_sink_f(
-        	self.GetWin(),
-        	unit="Units",
-        	minval=0,
-        	maxval=1,
-        	factor=1.0,
-        	decimal_places=10,
-        	ref_level=0,
-        	sample_rate=samp_rate,
-        	number_rate=15,
-        	average=False,
-        	avg_alpha=None,
-        	label="Error Rate",
-        	peak_hold=False,
-        	show_gauge=False,
-        )
-        self.Add(self.wxgui_numbersink2_0.win)
         self.wxgui_fftsink2_0 = fftsink2.fft_sink_c(
         	self.GetWin(),
         	baseband_freq=0,
@@ -110,7 +105,7 @@ class fhss_sync(grc_wxgui.top_block_gui):
         	fft_rate=15,
         	average=False,
         	avg_alpha=None,
-        	title="Despread Signal",
+        	title='Despread Signal',
         	peak_hold=False,
         )
         self.GridAdd(self.wxgui_fftsink2_0.win, 0, 2, 2, 4)
@@ -123,12 +118,8 @@ class fhss_sync(grc_wxgui.top_block_gui):
         	block_tags=False
         )
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
+        self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_char*1)
         self.blocks_add_xx_0 = blocks.add_vcc(1)
-        self.blks2_error_rate_0 = grc_blks2.error_rate(
-        	type='BER',
-        	win_size=1000,
-        	bits_per_symbol=2,
-        )
         self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, tone_freq, 2, 0)
         self.analog_random_source_x_0 = blocks.vector_source_b(map(int, numpy.random.randint(0, 2, 1000)), True)
         self.Spread_synthesizer_0 = Spread.synthesizer(code_rate, 0, samp_rate, (generator), (init))
@@ -146,21 +137,17 @@ class fhss_sync(grc_wxgui.top_block_gui):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.Spread_rx_synthesizer_0, 0), (self.wxgui_fftsink2_0, 0))
-        self.connect((self.Spread_rx_synthesizer_0, 0), (self.blocks_throttle_0, 0))
-        self.connect((self.blocks_throttle_0, 0), (self.Spread_cpfsk_demod_0, 0))
-        self.connect((self.Spread_cpfsk_mod_0, 0), (self.Spread_synthesizer_0, 0))
-        self.connect((self.analog_random_source_x_0, 0), (self.blks2_error_rate_0, 0))
-        self.connect((self.analog_random_source_x_0, 0), (self.Spread_cpfsk_mod_0, 0))
-        self.connect((self.Spread_cpfsk_demod_0, 0), (self.blks2_error_rate_0, 1))
-        self.connect((self.blks2_error_rate_0, 0), (self.wxgui_numbersink2_0, 0))
-        self.connect((self.blocks_add_xx_0, 0), (self.channels_channel_model_0, 0))
-        self.connect((self.Spread_synthesizer_0, 0), (self.blocks_add_xx_0, 1))
-        self.connect((self.analog_sig_source_x_0, 0), (self.blocks_add_xx_0, 0))
-        self.connect((self.channels_channel_model_0, 0), (self.wxgui_waterfallsink2_0, 0))
-        self.connect((self.channels_channel_model_0, 0), (self.Spread_rx_synthesizer_0, 0))
-
-
+        self.connect((self.Spread_cpfsk_demod_0, 0), (self.blocks_null_sink_0, 0))    
+        self.connect((self.Spread_cpfsk_mod_0, 0), (self.Spread_synthesizer_0, 0))    
+        self.connect((self.Spread_rx_synthesizer_0, 0), (self.Spread_cpfsk_demod_0, 0))    
+        self.connect((self.Spread_rx_synthesizer_0, 0), (self.wxgui_fftsink2_0, 0))    
+        self.connect((self.Spread_synthesizer_0, 0), (self.blocks_add_xx_0, 1))    
+        self.connect((self.analog_random_source_x_0, 0), (self.Spread_cpfsk_mod_0, 0))    
+        self.connect((self.analog_sig_source_x_0, 0), (self.blocks_add_xx_0, 0))    
+        self.connect((self.blocks_add_xx_0, 0), (self.blocks_throttle_0, 0))    
+        self.connect((self.blocks_throttle_0, 0), (self.channels_channel_model_0, 0))    
+        self.connect((self.channels_channel_model_0, 0), (self.Spread_rx_synthesizer_0, 0))    
+        self.connect((self.channels_channel_model_0, 0), (self.wxgui_waterfallsink2_0, 0))    
 
     def get_samp_sym(self):
         return self.samp_sym
@@ -183,10 +170,10 @@ class fhss_sync(grc_wxgui.top_block_gui):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
-        self.blocks_throttle_0.set_sample_rate(self.samp_rate)
-        self.channels_channel_model_0.set_frequency_offset(1 / self.samp_rate)
         self.wxgui_waterfallsink2_0.set_sample_rate(self.samp_rate)
+        self.wxgui_fftsink2_0.set_sample_rate(self.samp_rate)
+        self.channels_channel_model_0.set_frequency_offset(1 / self.samp_rate)
+        self.blocks_throttle_0.set_sample_rate(self.samp_rate)
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
 
     def get_init(self):
@@ -207,17 +194,13 @@ class fhss_sync(grc_wxgui.top_block_gui):
     def set_code_rate(self, code_rate):
         self.code_rate = code_rate
 
-if __name__ == '__main__':
-    import ctypes
-    import sys
-    if sys.platform.startswith('linux'):
-        try:
-            x11 = ctypes.cdll.LoadLibrary('libX11.so')
-            x11.XInitThreads()
-        except:
-            print "Warning: failed to XInitThreads()"
-    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    (options, args) = parser.parse_args()
-    tb = fhss_sync()
+
+def main(top_block_cls=fhss_sync, options=None):
+
+    tb = top_block_cls()
     tb.Start(True)
     tb.Wait()
+
+
+if __name__ == '__main__':
+    main()
