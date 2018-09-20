@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: RTL SDR FM RX
-# Generated: Tue Sep 18 22:04:30 2018
+# Generated: Wed Sep 19 00:55:11 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -19,6 +19,7 @@ if __name__ == '__main__':
 from PyQt4 import Qt
 from gnuradio import analog
 from gnuradio import audio
+from gnuradio import blocks
 from gnuradio import eng_notation
 from gnuradio import filter
 from gnuradio import gr
@@ -152,8 +153,9 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         self.osmosdr_source_0.set_antenna('', 0)
         self.osmosdr_source_0.set_bandwidth(0, 0)
           
-        self.low_pass_filter_1 = filter.fir_filter_fff(10, firdes.low_pass(
-        	pow(10,afgain/10), 240e3, audio_cut, audio_cut/2, firdes.WIN_HAMMING, 6.76))
+        self.fft_filter_xxx_0 = filter.fft_filter_fff(1, (firdes.low_pass(pow(10.0,afgain/10.0),ch_rate,12e3,6e3,firdes.WIN_BLACKMAN)), 1)
+        self.fft_filter_xxx_0.declare_sample_delay(0)
+        self.blocks_keep_one_in_n_0 = blocks.keep_one_in_n(gr.sizeof_float*1, 10)
         self.blks2_valve_0 = grc_blks2.valve(item_size=gr.sizeof_float*1, open=bool(audio_mute))
         self.audio_sink_0 = audio.sink(int(ch_rate/10), '', True)
         self.analog_quadrature_demod_cf_0 = analog.quadrature_demod_cf(ch_rate/(2*math.pi*250e3/8.0))
@@ -161,9 +163,10 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_quadrature_demod_cf_0, 0), (self.low_pass_filter_1, 0))    
+        self.connect((self.analog_quadrature_demod_cf_0, 0), (self.fft_filter_xxx_0, 0))    
         self.connect((self.blks2_valve_0, 0), (self.audio_sink_0, 0))    
-        self.connect((self.low_pass_filter_1, 0), (self.blks2_valve_0, 0))    
+        self.connect((self.blocks_keep_one_in_n_0, 0), (self.blks2_valve_0, 0))    
+        self.connect((self.fft_filter_xxx_0, 0), (self.blocks_keep_one_in_n_0, 0))    
         self.connect((self.osmosdr_source_0, 0), (self.qtgui_freq_sink_x_0, 0))    
         self.connect((self.osmosdr_source_0, 0), (self.rational_resampler_xxx_0, 0))    
         self.connect((self.rational_resampler_xxx_0, 0), (self.analog_quadrature_demod_cf_0, 0))    
@@ -201,6 +204,7 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
 
     def set_ch_rate(self, ch_rate):
         self.ch_rate = ch_rate
+        self.fft_filter_xxx_0.set_taps((firdes.low_pass(pow(10.0,self.afgain/10.0),self.ch_rate,12e3,6e3,firdes.WIN_BLACKMAN)))
         self.analog_quadrature_demod_cf_0.set_gain(self.ch_rate/(2*math.pi*250e3/8.0))
 
     def get_audio_mute(self):
@@ -216,14 +220,13 @@ class RTL_FM_RX(gr.top_block, Qt.QWidget):
 
     def set_audio_cut(self, audio_cut):
         self.audio_cut = audio_cut
-        self.low_pass_filter_1.set_taps(firdes.low_pass(pow(10,self.afgain/10), 240e3, self.audio_cut, self.audio_cut/2, firdes.WIN_HAMMING, 6.76))
 
     def get_afgain(self):
         return self.afgain
 
     def set_afgain(self, afgain):
         self.afgain = afgain
-        self.low_pass_filter_1.set_taps(firdes.low_pass(pow(10,self.afgain/10), 240e3, self.audio_cut, self.audio_cut/2, firdes.WIN_HAMMING, 6.76))
+        self.fft_filter_xxx_0.set_taps((firdes.low_pass(pow(10.0,self.afgain/10.0),self.ch_rate,12e3,6e3,firdes.WIN_BLACKMAN)))
 
 
 def main(top_block_cls=RTL_FM_RX, options=None):
