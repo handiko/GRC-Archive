@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Aprs Rx Test
-# Generated: Mon Apr  2 17:36:51 2018
+# Generated: Tue Dec 25 20:03:04 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -137,7 +137,7 @@ class aprs_rx_test(gr.top_block, Qt.QWidget):
         self.digital_diff_decoder_bb_0 = digital.diff_decoder_bb(2)
         self.digital_clock_recovery_mm_xx_0 = digital.clock_recovery_mm_ff(2*(1+0.0), 0.25*gain_mu*gain_mu, 0.5, gain_mu, 0.005)
         self.digital_binary_slicer_fb_0 = digital.binary_slicer_fb()
-        self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/handiko/aprs.wav', True)
+        self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/handiko/aprs_test.wav', True)
         self.blocks_pdu_to_tagged_stream_1 = blocks.pdu_to_tagged_stream(blocks.byte_t, 'packet_len')
         self.blocks_not_xx_0 = blocks.not_bb()
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_vff((0.1, ))

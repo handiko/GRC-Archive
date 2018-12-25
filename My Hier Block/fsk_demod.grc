@@ -6,7 +6,7 @@
     <key>options</key>
     <param>
       <key>author</key>
-      <value></value>
+      <value>Handiko Gesang</value>
     </param>
     <param>
       <key>window_size</key>
@@ -22,7 +22,7 @@
     </param>
     <param>
       <key>description</key>
-      <value></value>
+      <value>www.github.com/handiko</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -512,7 +512,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(670, 661)</value>
+      <value>(659, 553)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -758,7 +758,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1053, 673)</value>
+      <value>(1042, 565)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -860,7 +860,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(813, 649)</value>
+      <value>(802, 541)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1180,7 +1180,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(424, 641)</value>
+      <value>(413, 533)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1207,7 +1207,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(418, 702)</value>
+      <value>(407, 594)</value>
     </param>
     <param>
       <key>_rotation</key>

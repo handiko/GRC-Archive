@@ -763,7 +763,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1545, 528)</value>
+      <value>(1578, 534)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1323,10 +1323,6 @@ needed to be copied to the
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
       <key>_enabled</key>
       <value>0</value>
     </param>
@@ -1341,6 +1337,10 @@ needed to be copied to the
     <param>
       <key>id</key>
       <value>igate_aprs_demod_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1362,15 +1362,7 @@ needed to be copied to the
       <value></value>
     </param>
     <param>
-      <key>callsign</key>
-      <value>YD1SDL-10</value>
-    </param>
-    <param>
       <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
       <value></value>
     </param>
     <param>
@@ -1386,12 +1378,20 @@ needed to be copied to the
       <value>0</value>
     </param>
     <param>
-      <key>host</key>
-      <value>rotate.aprs2.net</value>
-    </param>
-    <param>
       <key>id</key>
       <value>igate_aprs_is_sink_0_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>callsign</key>
+      <value>YD1SDL-10</value>
+    </param>
+    <param>
+      <key>host</key>
+      <value>rotate.aprs2.net</value>
     </param>
     <param>
       <key>password</key>
@@ -1413,18 +1413,6 @@ needed to be copied to the
       <value></value>
     </param>
     <param>
-      <key>ctrl</key>
-      <value>3</value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>dst</key>
-      <value>APGRC</value>
-    </param>
-    <param>
       <key>_enabled</key>
       <value>0</value>
     </param>
@@ -1439,6 +1427,18 @@ needed to be copied to the
     <param>
       <key>id</key>
       <value>igate_aprs_pkt_gen_0_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>ctrl</key>
+      <value>3</value>
+    </param>
+    <param>
+      <key>dst</key>
+      <value>APGRC</value>
     </param>
     <param>
       <key>info</key>
@@ -1480,18 +1480,6 @@ needed to be copied to the
       <value></value>
     </param>
     <param>
-      <key>ctrl</key>
-      <value>3</value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>dst</key>
-      <value>APGRC</value>
-    </param>
-    <param>
       <key>_enabled</key>
       <value>0</value>
     </param>
@@ -1506,6 +1494,18 @@ needed to be copied to the
     <param>
       <key>id</key>
       <value>igate_aprs_pkt_gen_0_0_1_0_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>ctrl</key>
+      <value>3</value>
+    </param>
+    <param>
+      <key>dst</key>
+      <value>APGRC</value>
     </param>
     <param>
       <key>info</key>
@@ -1547,10 +1547,6 @@ needed to be copied to the
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
       <key>_enabled</key>
       <value>0</value>
     </param>
@@ -1565,6 +1561,10 @@ needed to be copied to the
     <param>
       <key>id</key>
       <value>igate_debug_print_msg_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
     </param>
   </block>
   <block>
