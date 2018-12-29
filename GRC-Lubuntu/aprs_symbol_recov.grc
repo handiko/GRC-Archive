@@ -399,7 +399,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1293,7 +1293,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
       <value>Pyhton module which required 
 to run this script (packet.py)
 needed to be copied to the 
-/lib/python dir</value>
+/usr/lib/python2.7 dir</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -2902,7 +2902,7 @@ needed to be copied to the
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(8, 132)</value>
+      <value>(8, 134)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -3820,7 +3820,7 @@ to be copied to /lib/python2 dir</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(477, 494)</value>
+      <value>(478, 493)</value>
     </param>
     <param>
       <key>gui_hint</key>

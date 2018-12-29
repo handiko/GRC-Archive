@@ -182,12 +182,8 @@
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -200,6 +196,10 @@
     <param>
       <key>id</key>
       <value>DL1KSV_AFSK_1200baud_demod_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -225,20 +225,8 @@
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>device_ppm</key>
-      <value>58</value>
-    </param>
-    <param>
       <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>freq</key>
-      <value>144.39e6</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -251,6 +239,18 @@
     <param>
       <key>id</key>
       <value>RTL_APRS_RX_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>device_ppm</key>
+      <value>58</value>
+    </param>
+    <param>
+      <key>freq</key>
+      <value>144.39e6</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -289,7 +289,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -317,6 +317,61 @@
     </param>
   </block>
   <block>
+    <key>audio_source</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>device_name</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(7, 262)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>audio_source_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>num_outputs</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>ok_to_block</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>48000</value>
+    </param>
+  </block>
+  <block>
     <key>fft_filter_xxx</key>
     <param>
       <key>alias</key>
@@ -336,7 +391,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -368,7 +423,7 @@
     </param>
     <param>
       <key>taps</key>
-      <value>firdes.band_pass(1,48e3,1e3,2400,1e2,firdes.WIN_HAMMING)</value>
+      <value>firdes.band_pass(10,48e3,1e3,2400,1e2,firdes.WIN_HAMMING)</value>
     </param>
     <param>
       <key>type</key>
@@ -391,11 +446,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(208, 428)</value>
+      <value>(271, 428)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -438,7 +493,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -489,7 +544,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -505,7 +560,7 @@
     </param>
     <param>
       <key>info</key>
-      <value>!0745.80S/11022.51E`PHG5130/GNU Radio APRS I-gate - ver 0</value>
+      <value>!0615.52S/10643.56E`PHG5130/GNU Radio APRS I-gate - ver 0</value>
     </param>
     <param>
       <key>interval</key>
@@ -556,7 +611,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -883,7 +938,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -938,7 +993,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>fftsize</key>
@@ -1213,7 +1268,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1240,7 +1295,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1267,7 +1322,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1294,7 +1349,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1322,18 +1377,24 @@
   <connection>
     <source_block_id>RTL_APRS_RX_0</source_block_id>
     <sink_block_id>fft_filter_xxx_3</sink_block_id>
-    <source_key>1</source_key>
+    <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>RTL_APRS_RX_0</source_block_id>
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
-    <source_key>0</source_key>
+    <source_key>1</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>afsk_aprs2inet_1</source_block_id>
     <sink_block_id>show_text_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>audio_source_0</source_block_id>
+    <sink_block_id>fft_filter_xxx_3</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
