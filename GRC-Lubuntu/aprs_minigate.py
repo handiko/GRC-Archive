@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: APRS I-Gate
 # Author: Handiko Gesang - YD1SDL - 2018
-# Generated: Sat Dec 29 01:12:48 2018
+# Generated: Thu Jan  3 21:29:46 2019
 ##################################################
 
 if __name__ == '__main__':
@@ -17,17 +17,25 @@ if __name__ == '__main__':
         except:
             print "Warning: failed to XInitThreads()"
 
+import os
+import sys
+sys.path.append(os.environ.get('GRC_HIER_PATH', os.path.expanduser('~/.grc_gnuradio')))
+
+from DL1KSV_AFSK_1200baud_demod import DL1KSV_AFSK_1200baud_demod  # grc-generated hier_block
 from PyQt4 import Qt
-from gnuradio import audio
+from RTL_APRS_RX import RTL_APRS_RX  # grc-generated hier_block
 from gnuradio import eng_notation
 from gnuradio import filter
 from gnuradio import gr
+from gnuradio import qtgui
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from gnuradio.qtgui import Range, RangeWidget
 from optparse import OptionParser
+import afsk
+import display
 import igate
-import sys
+import sip
 
 
 class aprs_minigate(gr.top_block, Qt.QWidget):
@@ -59,22 +67,78 @@ class aprs_minigate(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.samp_rate = samp_rate = 1.2e6
-        self.rfgain = rfgain = 30
+        self.rfgain = rfgain = 8.0
 
         ##################################################
         # Blocks
         ##################################################
-        self._rfgain_range = Range(0, 49, 1, 30, 200)
+        self._rfgain_range = Range(0.0, 49.0, 1.0, 8.0, 200)
         self._rfgain_win = RangeWidget(self._rfgain_range, self.set_rfgain, 'RF Gain (dB)', "counter_slider", float)
         self.top_grid_layout.addWidget(self._rfgain_win, 1,0,1,2)
+        self.show_text_0 = display.show_text()
+        self._show_text_0_win = sip.wrapinstance(self.show_text_0.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._show_text_0_win, 2,0,1,2)
+        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
+        	2048, #size
+        	firdes.WIN_BLACKMAN_hARRIS, #wintype
+        	144.39e6, #fc
+        	192e3, #bw
+        	"", #name
+        	1 #number of inputs
+        )
+        self.qtgui_freq_sink_x_0.set_update_time(0.10)
+        self.qtgui_freq_sink_x_0.set_y_axis(-120, -10)
+        self.qtgui_freq_sink_x_0.set_y_label('Relative Gain', 'dB')
+        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
+        self.qtgui_freq_sink_x_0.enable_autoscale(False)
+        self.qtgui_freq_sink_x_0.enable_grid(True)
+        self.qtgui_freq_sink_x_0.set_fft_average(0.2)
+        self.qtgui_freq_sink_x_0.enable_axis_labels(False)
+        self.qtgui_freq_sink_x_0.enable_control_panel(False)
+        
+        if not False:
+          self.qtgui_freq_sink_x_0.disable_legend()
+        
+        if "complex" == "float" or "complex" == "msg_float":
+          self.qtgui_freq_sink_x_0.set_plot_pos_half(not True)
+        
+        labels = ['', '', '', '', '',
+                  '', '', '', '', '']
+        widths = [2, 1, 1, 1, 1,
+                  1, 1, 1, 1, 1]
+        colors = ["red", "red", "green", "black", "cyan",
+                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        alphas = [0.8, 1.0, 1.0, 1.0, 1.0,
+                  1.0, 1.0, 1.0, 1.0, 1.0]
+        for i in xrange(1):
+            if len(labels[i]) == 0:
+                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+        
+        self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_win, 0,0,1,1)
         self.igate_debug_print_msg_0 = igate.debug_print_msg()
         self.igate_aprs_pkt_gen_0_0 = igate.aprs_pkt_gen(300, 'YD1SDL-10', 'APGRC', 'WIDE2-2', 240, 3, '>Non Permanent - Experimental')
-        self.igate_aprs_pkt_gen_0 = igate.aprs_pkt_gen(120, 'YD1SDL-10', 'APGRC', 'WIDE2-2', 240, 3, '!0615.52S/10643.56E`PHG5130/GNU Radio APRS I-gate - ver 0')
+        self.igate_aprs_pkt_gen_0 = igate.aprs_pkt_gen(120, 'YD1SDL-10', 'APGRC', 'WIDE2-2', 240, 3, '!0615.32S/10643.36E`PHG5130/GNU Radio APRS I-gate - ver 0')
         self.igate_aprs_is_sink_0 = igate.aprs_is_sink('rotate.aprs.net', 14580, 'YD1SDL-10', 24505)
         self.igate_aprs_demod_0 = igate.aprs_demod(48000)
-        self.fft_filter_xxx_3 = filter.fft_filter_fff(1, (firdes.band_pass(10,48e3,1e3,2400,1e2,firdes.WIN_HAMMING)), 1)
+        self.fft_filter_xxx_3 = filter.fft_filter_fff(1, (firdes.band_pass(10,48e3,1e3,2600,1e2,firdes.WIN_HAMMING)), 1)
         self.fft_filter_xxx_3.declare_sample_delay(0)
-        self.audio_source_0 = audio.source(48000, '', True)
+        self.afsk_aprs2inet_1 = afsk.aprs2inet(48000, 4)
+        self.RTL_APRS_RX_0 = RTL_APRS_RX(
+            device_ppm=58,
+            freq=144.39e6,
+            rf_gain=rfgain,
+            samp_rate=samp_rate,
+            squelch=-60,
+        )
+        self.DL1KSV_AFSK_1200baud_demod_0 = DL1KSV_AFSK_1200baud_demod(
+            samp_rate=48000,
+        )
 
         ##################################################
         # Connections
@@ -85,7 +149,11 @@ class aprs_minigate(gr.top_block, Qt.QWidget):
         self.msg_connect((self.igate_aprs_pkt_gen_0, 'out'), (self.igate_debug_print_msg_0, 'in'))    
         self.msg_connect((self.igate_aprs_pkt_gen_0_0, 'out'), (self.igate_aprs_is_sink_0, 'in'))    
         self.msg_connect((self.igate_aprs_pkt_gen_0_0, 'out'), (self.igate_debug_print_msg_0, 'in'))    
-        self.connect((self.audio_source_0, 0), (self.fft_filter_xxx_3, 0))    
+        self.connect((self.DL1KSV_AFSK_1200baud_demod_0, 0), (self.afsk_aprs2inet_1, 0))    
+        self.connect((self.RTL_APRS_RX_0, 1), (self.fft_filter_xxx_3, 0))    
+        self.connect((self.RTL_APRS_RX_0, 0), (self.qtgui_freq_sink_x_0, 0))    
+        self.connect((self.afsk_aprs2inet_1, 0), (self.show_text_0, 0))    
+        self.connect((self.fft_filter_xxx_3, 0), (self.DL1KSV_AFSK_1200baud_demod_0, 0))    
         self.connect((self.fft_filter_xxx_3, 0), (self.igate_aprs_demod_0, 0))    
 
     def closeEvent(self, event):
@@ -98,12 +166,14 @@ class aprs_minigate(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
+        self.RTL_APRS_RX_0.set_samp_rate(self.samp_rate)
 
     def get_rfgain(self):
         return self.rfgain
 
     def set_rfgain(self, rfgain):
         self.rfgain = rfgain
+        self.RTL_APRS_RX_0.set_rf_gain(self.rfgain)
 
 
 def main(top_block_cls=aprs_minigate, options=None):

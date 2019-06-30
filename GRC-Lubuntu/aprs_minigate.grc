@@ -89,7 +89,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>30</value>
+      <value>8.0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -125,15 +125,15 @@
     </param>
     <param>
       <key>start</key>
-      <value>0</value>
+      <value>0.0</value>
     </param>
     <param>
       <key>step</key>
-      <value>1</value>
+      <value>1.0</value>
     </param>
     <param>
       <key>stop</key>
-      <value>49</value>
+      <value>49.0</value>
     </param>
     <param>
       <key>rangeType</key>
@@ -182,8 +182,12 @@
       <value></value>
     </param>
     <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -196,10 +200,6 @@
     <param>
       <key>id</key>
       <value>DL1KSV_AFSK_1200baud_demod_0</value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -225,8 +225,20 @@
       <value></value>
     </param>
     <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>device_ppm</key>
+      <value>58</value>
+    </param>
+    <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
+    </param>
+    <param>
+      <key>freq</key>
+      <value>144.39e6</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -239,18 +251,6 @@
     <param>
       <key>id</key>
       <value>RTL_APRS_RX_0</value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>device_ppm</key>
-      <value>58</value>
-    </param>
-    <param>
-      <key>freq</key>
-      <value>144.39e6</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -267,6 +267,10 @@
     <param>
       <key>samp_rate</key>
       <value>samp_rate</value>
+    </param>
+    <param>
+      <key>squelch</key>
+      <value>-60</value>
     </param>
   </block>
   <block>
@@ -289,7 +293,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -336,11 +340,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(7, 262)</value>
+      <value>(6, 275)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -423,7 +427,7 @@
     </param>
     <param>
       <key>taps</key>
-      <value>firdes.band_pass(10,48e3,1e3,2400,1e2,firdes.WIN_HAMMING)</value>
+      <value>firdes.band_pass(10,48e3,1e3,2600,1e2,firdes.WIN_HAMMING)</value>
     </param>
     <param>
       <key>type</key>
@@ -548,7 +552,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(8, 484)</value>
+      <value>(7, 485)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -560,7 +564,7 @@
     </param>
     <param>
       <key>info</key>
-      <value>!0615.52S/10643.56E`PHG5130/GNU Radio APRS I-gate - ver 0</value>
+      <value>!0615.32S/10643.36E`PHG5130/GNU Radio APRS I-gate - ver 0</value>
     </param>
     <param>
       <key>interval</key>
@@ -993,7 +997,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>fftsize</key>
@@ -1268,7 +1272,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1322,7 +1326,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1377,13 +1381,13 @@
   <connection>
     <source_block_id>RTL_APRS_RX_0</source_block_id>
     <sink_block_id>fft_filter_xxx_3</sink_block_id>
-    <source_key>0</source_key>
+    <source_key>1</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>RTL_APRS_RX_0</source_block_id>
     <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
-    <source_key>1</source_key>
+    <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
